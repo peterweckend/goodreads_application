@@ -25,9 +25,10 @@ public class SearchBooksService {
     public static final String URL_PARAM_KEY = "key";
     public static final String URL_PARAM_QUERY = "q";
     public static final String URL_PARAM_PAGE = "page";
+    public static final String URL_PARAM_FIELD = "search[field]";
 
-    public static final String AUTHOR_SORT = "author";
-    public static final String TITLE_SORT = "title";
+    public static final String AUTHOR_FIELD = "author";
+    public static final String TITLE_FIELD = "title";
 
     public static final String BOOK_TAG = "best_book";
     public static final String AUTHOR_TAG = "author";
@@ -41,11 +42,15 @@ public class SearchBooksService {
     private String url;
     private static final Logger log = LoggerFactory.getLogger(SearchBooksService.class);
 
-    public ArrayList<BookModel> SearchGoodReadsForBooksByTerms(String searchTerms, String sort, Integer pageNumber) {
+    public SearchBooksResponseModel SearchGoodReadsForBooksByTerms(String searchTerms, String field, Integer pageNumber) {
+        // For a larger app, I might have a validator class I call here or in
+        // the controller to check that required properties are supplied and
+        // and the provided values are in the correct format
         try {
             URIBuilder uriBuilder = new URIBuilder(url);
             uriBuilder.addParameter(URL_PARAM_KEY, apiKey);
             uriBuilder.addParameter(URL_PARAM_QUERY, searchTerms);
+            uriBuilder.addParameter(URL_PARAM_FIELD, field);
             uriBuilder.addParameter(URL_PARAM_PAGE, pageNumber.toString());
             log.info("URI!" + uriBuilder.toString());
 
@@ -55,6 +60,8 @@ public class SearchBooksService {
 
             // For a real world application, I would do some checks to make sure there's
             // no security risks from the returned XML
+
+            // I would also look to cache the results from GoodReads as well
 
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -80,10 +87,10 @@ public class SearchBooksService {
                 }
             }
 
-            return books;
+            return new SearchBooksResponseModel(null, books);
         } catch (Exception e) {
             log.error("An error occurred: " + e);
-            return null;//"An error occurred";
+            return new SearchBooksResponseModel(e.getMessage(), null);//"An error occurred";
         }
     }
 }

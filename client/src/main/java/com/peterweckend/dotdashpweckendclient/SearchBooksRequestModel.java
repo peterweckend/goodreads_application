@@ -2,12 +2,12 @@ package com.peterweckend.dotdashpweckendclient;
 
 public class SearchBooksRequestModel {
     private String searchTerms;
-    private String sort;
+    private String field;
     private Integer pageNumber;
 
-    public SearchBooksRequestModel(String searchTerms, String sort, Integer pageNumber) {
+    public SearchBooksRequestModel(String searchTerms, String field, Integer pageNumber) {
         this.searchTerms = searchTerms;
-        this.sort = sort;
+        this.field = field;
         this.pageNumber = pageNumber;
     }
 
@@ -21,12 +21,12 @@ public class SearchBooksRequestModel {
         this.searchTerms = searchTerms;
     }
 
-    public String getSort() {
-        return this.sort;
+    public String getField() {
+        return this.field;
     }
 
-    public void setSort(String sort) {
-        this.sort = sort;
+    public void setField(String field) {
+        this.field = field;
     }
 
     public Integer getPageNumber() {
