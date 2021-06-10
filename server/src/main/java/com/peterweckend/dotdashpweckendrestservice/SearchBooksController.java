@@ -6,9 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+
 @RestController
 public class SearchBooksController {
-
     private SearchBooksService searchBooksService;
 
     @Autowired
@@ -17,11 +18,11 @@ public class SearchBooksController {
     }
 
     @GetMapping("/searchBooks")
-    public String SearchBooksByTerms(
+    public ArrayList<BookModel> SearchBooksByTerms(
             @RequestParam(value = "searchTerms") String searchTerms,
-            @RequestParam(value = "field", defaultValue = "title") String field,
+            @RequestParam(value = "sort", defaultValue = SearchBooksService.TITLE_SORT) String field,
             @RequestParam(value = "pageNumber", defaultValue = "1") Integer pageNumber) {
-        var serviceString = searchBooksService.SearchGoodReadsForBooksByTerms(searchTerms, field, pageNumber);
-        return serviceString;
+        var books = searchBooksService.SearchGoodReadsForBooksByTerms(searchTerms, field, pageNumber);
+        return books;
     }
 }
