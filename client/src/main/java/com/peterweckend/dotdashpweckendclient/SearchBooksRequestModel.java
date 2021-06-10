@@ -1,16 +1,17 @@
-package com.peterweckend.dotdashpweckendrestservice;
+package com.peterweckend.dotdashpweckendclient;
 
 public class SearchBooksRequestModel {
-    private String field;
     private String searchTerms;
+    private String sort;
     private Integer pageNumber;
 
-    // todo: replace this with a return model instead
-    public SearchBooksRequestModel(String searchTerms, String field, Integer pageNumber) {
+    public SearchBooksRequestModel(String searchTerms, String sort, Integer pageNumber) {
         this.searchTerms = searchTerms;
-        this.field = field;
+        this.sort = sort;
         this.pageNumber = pageNumber;
     }
+
+    public SearchBooksRequestModel() {}
 
     public String getSearchTerms() {
         return this.searchTerms;
@@ -20,12 +21,12 @@ public class SearchBooksRequestModel {
         this.searchTerms = searchTerms;
     }
 
-    public String getField() {
-        return this.field;
+    public String getSort() {
+        return this.sort;
     }
 
-    public void setField(String field) {
-        this.field = field;
+    public void setSort(String sort) {
+        this.sort = sort;
     }
 
     public Integer getPageNumber() {
