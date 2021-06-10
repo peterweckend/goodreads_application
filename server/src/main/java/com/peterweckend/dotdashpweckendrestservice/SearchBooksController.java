@@ -6,12 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 @RestController
 public class SearchBooksController {
-    @Value("${testproperty}")
-    private String demoString;
+
     private SearchBooksService searchBooksService;
 
     @Autowired
@@ -20,8 +17,11 @@ public class SearchBooksController {
     }
 
     @GetMapping("/searchBooks")
-    public SearchBooksRequestModel SearchBooks(@RequestParam(value = "name", defaultValue = "World") String name) {
-        var serviceString = searchBooksService.SearchGoodreads();
-        return new SearchBooksRequestModel(demoString + serviceString);
+    public String SearchBooksByTerms(
+            @RequestParam(value = "searchTerms") String searchTerms,
+            @RequestParam(value = "field", defaultValue = "title") String field,
+            @RequestParam(value = "pageNumber", defaultValue = "1") Integer pageNumber) {
+        var serviceString = searchBooksService.SearchGoodReadsForBooksByTerms(searchTerms, field, pageNumber);
+        return serviceString;
     }
 }
