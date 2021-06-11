@@ -17,10 +17,6 @@ For any questions, feel free to contact me at peterweckend@gmail.com
 
 <hr/>
 
-### Book Listing Exercise
-
-The purpose of this exercise is to test your familiarity with Java client and server development.  You'll be building a small book listing app using frameworks of your choice and the Goodreads' public API. 
-
 ### Functional Requirements
 
 The client app will accept the following command line arguments (comma separated):
@@ -65,7 +61,7 @@ Logging, with the exception of errors
 
 ### Misc Notes
 
-https://www.goodreads.com/api/index#search.books (Key: RDfV4oPehM6jNhxfNQzzQ, Secret: fu8fQ5oGQEDlwiICw45dGSuxiu13STyIrxY0Rb6ibI).
+https://www.goodreads.com/api/index#search.books (Key: RDfV4oPehM6jNhxfNQzzQ).
 
 The Goodreads search API returns XML. Transform the XML into JSON and only send what your app will need
 
