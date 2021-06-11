@@ -19,12 +19,12 @@ For any questions, feel free to contact me at peterweckend@gmail.com
 
 ### Functional Requirements and command line argument information
 
-The client app will accept the following command line arguments (comma separated):
+The client app will accept the following command line arguments passed into the Spring application (separated by a comma):
 
 `--help` (Output a usage message and exit)
 
-`-s=TERMS,--search=TERMS` (Search the Goodreads' API and display the results on screen.
-Results must include author, title, and a link or display of the image of the book)
+`-s=TERMS,--search=TERMS` (Search the Goodreads' API for results matching the TERMS and display the results on screen.
+Results include author, title, and a link or display of the image of the book)
 
 `--field=FIELD` (Field to search on, where FIELD is one of "author" or "title", or "all", where "all" is the default)
 
@@ -37,6 +37,8 @@ There should be a server app as well. The server app should provide REST endpoin
 The server should listen on a non-restricted port and the client should connect to that port.
 
 The client should not directly contact the Goodreads API.
+
+Example: `-Dspring-boot.run.arguments="--search=the food lab,--field=title,--host=localhost,-p=1"`
 
 ### System Requirements
 
