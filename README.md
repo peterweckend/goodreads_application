@@ -17,21 +17,20 @@ For any questions, feel free to contact me at peterweckend@gmail.com
 
 <hr/>
 
-### Functional Requirements
+### Functional Requirements and command line argument information
 
 The client app will accept the following command line arguments (comma separated):
 
---help=Output a usage message and exit
+`--help` (Output a usage message and exit)
 
--s=TERMS, --search=TERMS Search the Goodreads' API and display the results on screen.
-Results must include author, title, and a link or display of the image of the book
+`-s=TERMS,--search=TERMS` (Search the Goodreads' API and display the results on screen.
+Results must include author, title, and a link or display of the image of the book)
 
---field=FIELD where FIELD is one of "author" or "title", or "all" (default)
-Field to search on
+`--field=FIELD` (Field to search on, where FIELD is one of "author" or "title", or "all", where "all" is the default)
 
--p=NUMBER if you choose to implement pagination, display the _NUMBER_ page of results
+`-p=NUMBER` (if you choose to implement pagination, display the _NUMBER_ page of results, defaults to 1)
 
--h=HOSTNAME, --host=HOSTNAME the hostname or ip address where the server can be found, should default to 127.0.0.1
+`-h=HOSTNAME,--host=HOSTNAME` (the hostname or ip address where the server can be found, should default to 127.0.0.1)
 
 There should be a server app as well. The server app should provide REST endpoints that the client communicates with. 
 
