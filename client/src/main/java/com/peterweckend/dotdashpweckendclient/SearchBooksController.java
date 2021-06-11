@@ -33,10 +33,6 @@ public class SearchBooksController implements CommandLineRunner {
         try {
             var searchResults = searchBooksService.searchBooks(createRequestModelForArguments(args));
 
-            if (searchResults.getError() != null && searchResults.getError().length() != 0) {
-                returnHelpInfoAndQuit(searchResults.getError());
-            }
-
             for (BookModel book : searchResults.getBooks()) {
                 logger.info("---------------------");
                 logger.info("Author: " + book.getAuthor());
@@ -44,7 +40,7 @@ public class SearchBooksController implements CommandLineRunner {
                 logger.info("Image URL: " + book.getImageUrl());
             }
             System.exit(0);
-        } catch (URISyntaxException e) {
+        } catch (Exception e) {
             returnHelpInfoAndQuit(e.toString());
         }
     }

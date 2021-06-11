@@ -1,20 +1,19 @@
 package com.peterweckend.dotdashpweckendrestservice;
 
 import org.apache.http.client.utils.URIBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.awt.print.Book;
-import java.net.URI;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -40,57 +39,49 @@ public class SearchBooksService {
     private String apiKey;
     @Value("${api.searchBooks.url}")
     private String url;
-    private static final Logger log = LoggerFactory.getLogger(SearchBooksService.class);
 
-    public SearchBooksResponseModel SearchGoodReadsForBooksByTerms(String searchTerms, String field, Integer pageNumber) {
+    public ArrayList<BookModel> SearchGoodReadsForBooksByTerms(String searchTerms, String field, Integer pageNumber) throws ParserConfigurationException, IOException, URISyntaxException, SAXException {
         // For a larger app, I might have a validator class I call here or in
         // the controller to check that required properties are supplied and
         // and the provided values are in the correct format
-        try {
-            URIBuilder uriBuilder = new URIBuilder(url);
-            uriBuilder.addParameter(URL_PARAM_KEY, apiKey);
-            uriBuilder.addParameter(URL_PARAM_QUERY, searchTerms);
-            uriBuilder.addParameter(URL_PARAM_FIELD, field);
-            uriBuilder.addParameter(URL_PARAM_PAGE, pageNumber.toString());
-            log.info("URI!" + uriBuilder.toString());
+        URIBuilder uriBuilder = new URIBuilder(url);
+        uriBuilder.addParameter(URL_PARAM_KEY, apiKey);
+        uriBuilder.addParameter(URL_PARAM_QUERY, searchTerms);
+        uriBuilder.addParameter(URL_PARAM_FIELD, field);
+        uriBuilder.addParameter(URL_PARAM_PAGE, pageNumber.toString());
 
-            // For a real world application, I would probably make a separate layer just for sending
-            // queries to GoodReads and then handle the business logic of parsing the response here
-            // in the service layer instead of doing it all in this file
+        // For a real world application, I would probably make a separate layer just for sending
+        // queries to GoodReads and then handle the business logic of parsing the response here
+        // in the service layer instead of doing it all in one file
 
-            // For a real world application, I would do some checks to make sure there's
-            // no security risks from the returned XML
+        // For a real world application, I would do the due diligence to make sure there's
+        // no risk of something like an XML injection attack
 
-            // I would also look to cache the results from GoodReads as well
+        // I would also look improve performance by caching the results from GoodReads, and
+        // finding ways to optimize the XML parsing (using either another library or finding
+        // ways to optimize this current library)
 
-            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            Document bookSearchResults = documentBuilder.parse(new URL(uriBuilder.toString()).openStream());
-            bookSearchResults.getDocumentElement().normalize();
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        Document bookSearchResults = documentBuilder.parse(new URL(uriBuilder.toString()).openStream());
+        bookSearchResults.getDocumentElement().normalize();
 
-            NodeList bookNodeList = bookSearchResults.getElementsByTagName(BOOK_TAG);
+        NodeList bookNodeList = bookSearchResults.getElementsByTagName(BOOK_TAG);
 
-            var books = new ArrayList<BookModel>();
-            for (int i = 0; i < bookNodeList.getLength(); i++) {
-                Node bookNode = bookNodeList.item(i);
+        var books = new ArrayList<BookModel>();
+        for (int i = 0; i < bookNodeList.getLength(); i++) {
+            Node bookNode = bookNodeList.item(i);
 
-                if (bookNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element bookElement = (Element) bookNode;
-                    var authorNode = bookElement.getElementsByTagName(AUTHOR_TAG).item(0);
-                    Element authorElement = (Element) authorNode;
-                    var authorName = authorElement.getElementsByTagName(AUTHOR_NAME_TAG).item(0).getTextContent();
+            if (bookNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element bookElement = (Element) bookNode;
+                var authorName = bookElement.getElementsByTagName(AUTHOR_NAME_TAG).item(0).getTextContent();
+                var title = bookElement.getElementsByTagName(TITLE_TAG).item(0).getTextContent();
+                var imageUrl = bookElement.getElementsByTagName(IMAGE_TAG).item(0).getTextContent();
 
-                    var title = bookElement.getElementsByTagName(TITLE_TAG).item(0).getTextContent();
-                    var imageUrl = bookElement.getElementsByTagName(IMAGE_TAG).item(0).getTextContent();
-
-                    books.add(new BookModel(authorName, title, imageUrl));
-                }
+                books.add(new BookModel(authorName, title, imageUrl));
             }
-
-            return new SearchBooksResponseModel(null, books);
-        } catch (Exception e) {
-            log.error("An error occurred: " + e);
-            return new SearchBooksResponseModel(e.getMessage(), null);
         }
+
+        return books;
     }
 }
