@@ -3,12 +3,14 @@ package com.peterweckend.dotdashpweckendclient;
 public class SearchBooksRequestModel {
     private String searchTerms;
     private String field;
-    private Integer pageNumber;
+    private String pageNumber;
+    private String hostname;
 
-    public SearchBooksRequestModel(String searchTerms, String field, Integer pageNumber) {
+    public SearchBooksRequestModel(String searchTerms, String field, String pageNumber, String hostname) {
         this.searchTerms = searchTerms;
         this.field = field;
         this.pageNumber = pageNumber;
+        this.hostname = hostname;
     }
 
     public SearchBooksRequestModel() {}
@@ -29,11 +31,19 @@ public class SearchBooksRequestModel {
         this.field = field;
     }
 
-    public Integer getPageNumber() {
+    public String getPageNumber() {
         return this.pageNumber;
     }
 
-    public void setPageNumber(Integer pageNumber) {
+    public void setPageNumber(String pageNumber) {
         this.pageNumber = pageNumber;
+    }
+
+    public String getHostname() {
+        return this.hostname;
+    }
+
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
     }
 }

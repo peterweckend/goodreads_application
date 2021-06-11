@@ -90,7 +90,7 @@ public class SearchBooksService {
             return new SearchBooksResponseModel(null, books);
         } catch (Exception e) {
             log.error("An error occurred: " + e);
-            return new SearchBooksResponseModel(e.getMessage(), null);//"An error occurred";
+            return new SearchBooksResponseModel(e.getMessage(), null);
         }
     }
 }
