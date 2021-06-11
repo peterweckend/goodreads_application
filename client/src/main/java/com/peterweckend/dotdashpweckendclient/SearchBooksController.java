@@ -31,6 +31,11 @@ public class SearchBooksController implements CommandLineRunner {
             var searchResults = searchBooksService.searchBooks(createRequestModelForArguments(args));
             // In a real world application I wouldn't hardcode the output like this,
             // I'd put it in its own set of files instead
+            if (searchResults.length == 0) {
+                logger.info("---------------------");
+                logger.info("No results found.");
+                returnHelpInfoAndQuit(null);
+            }
             for (BookModel book : searchResults) {
                 // output the returned books to the command line and the log file
                 logger.info("---------------------");
