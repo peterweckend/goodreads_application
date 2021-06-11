@@ -27,7 +27,6 @@ public class SearchBooksService {
     public static final String URL_PARAM_FIELD = "search[field]";
 
     public static final String BOOK_TAG = "best_book";
-    public static final String AUTHOR_TAG = "author";
     public static final String AUTHOR_NAME_TAG = "name";
     public static final String TITLE_TAG = "title";
     public static final String IMAGE_TAG = "image_url";
@@ -51,26 +50,28 @@ public class SearchBooksService {
         // queries to GoodReads and then handle the business logic of parsing the response here
         // in the service layer instead of doing it all in one file
 
-        // For a real world application, I would do the due diligence to make sure there's
-        // no risk of something like an XML injection attack
+        // I would do any required due diligence to make sure there's no risk of something like
+        // an XML injection attack
 
         // I would also look improve performance by caching the results from GoodReads, and
         // finding ways to optimize the XML parsing (using either another library or finding
         // ways to optimize this current library)
-
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        // fetch results from GoodReads
         Document bookSearchResults = documentBuilder.parse(new URL(uriBuilder.toString()).openStream());
         bookSearchResults.getDocumentElement().normalize();
-
+        // get the book tags from the returned results
         NodeList bookNodeList = bookSearchResults.getElementsByTagName(BOOK_TAG);
 
         var books = new ArrayList<BookModel>();
         for (int i = 0; i < bookNodeList.getLength(); i++) {
             Node bookNode = bookNodeList.item(i);
-
+            // for each book, grab the author, title, and image URL - to be returned to the client
             if (bookNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element bookElement = (Element) bookNode;
+                // the name tag is nested inside the author object, but no other properties use the name tag;
+                // saves a step
                 var authorName = bookElement.getElementsByTagName(AUTHOR_NAME_TAG).item(0).getTextContent();
                 var title = bookElement.getElementsByTagName(TITLE_TAG).item(0).getTextContent();
                 var imageUrl = bookElement.getElementsByTagName(IMAGE_TAG).item(0).getTextContent();
@@ -78,7 +79,6 @@ public class SearchBooksService {
                 books.add(new BookModel(authorName, title, imageUrl));
             }
         }
-
         return books;
     }
 }

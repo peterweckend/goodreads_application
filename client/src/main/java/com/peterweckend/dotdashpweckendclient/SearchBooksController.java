@@ -32,27 +32,35 @@ public class SearchBooksController implements CommandLineRunner {
             // In a real world application I wouldn't hardcode the output like this,
             // I'd put it in its own set of files instead
             for (BookModel book : searchResults) {
+                // output the returned books to the command line and the log file
                 logger.info("---------------------");
                 logger.info("Author: " + book.getAuthor());
                 logger.info("Title: " + book.getTitle());
                 logger.info("Image URL: " + book.getImageUrl());
             }
-            logger.info("Fetching complete. Re-run the program to fetch with a different set of parameters.");
+            logger.info("\nFetching complete. Quit and re-run the program to fetch with a different set of parameters.");
         } catch (Exception e) {
             returnHelpInfoAndQuit(e.toString());
         }
     }
 
+    // Simple method that parses the command line arguments and sets the book
+    // request model as appropriate. In a larger application with more complex
+    // command line arguments and input validation, I would make use of a framework
+    // to help manage the command line arguments for me instead of performing
+    // string manipulation and splitting on commas and equals signs
     public SearchBooksRequestModel createRequestModelForArguments(String...args) {
         var searchBooksRequestModel = new SearchBooksRequestModel();
         searchBooksRequestModel.setHostname(HOSTNAME);
 
+        // allow for searching by space separated key words
         var stringArgs = String.join(" ", args);
         var splitArgs = stringArgs.split(",");
         for (String arg : splitArgs) {
             var equalsSplitArgs = arg.split("=");
             switch (equalsSplitArgs[0]) {
                 case HELP_PARAM:
+                    // do not send a request if the user asks for help
                     returnHelpInfoAndQuit(null);
                     break;
                 case SEARCH_PARAM:
@@ -74,7 +82,13 @@ public class SearchBooksController implements CommandLineRunner {
         return searchBooksRequestModel;
     }
 
+    // Output any exceptions to the command line and the log file
+    // Additionally, output help text for the user
     public void returnHelpInfoAndQuit(String error) {
+        // In a real world application I wouldn't hardcode the output like this,
+        // I'd put it in its own set of files instead.
+        // Additionally, I'd handle error management in its own section of the app
+        // and create custom exceptions as needed
         logger.info("---------------------");
         logger.info("The client accepts the following command line arguments separated by a comma: ");
         logger.info("--help (outputs a usage message and exists)");
