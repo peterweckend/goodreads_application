@@ -6,7 +6,7 @@ Navigate to `/goodreads_application/server` in the terminal and run `./mvnw spri
 Navigate to `/goodreads_application/client` in the terminal and run `./mvnw spring-boot:run -Dspring-boot.run.arguments="--search=the food lab,--field=title,--host=localhost,-p=1"` (replacing the example arguments with other values as needed - see Functional Requirements below for more info)
 <hr/>
 
-Both the client and the server use Spring and Maven. (developed with JDK 11.0.11, Maven 3.8.1)
+Both the client and the server use Spring and Maven (developed with JDK 11.0.11, Maven 3.8.1).
 
 Upon receiving the command line arguments on run, the client will send a request to the API endpoint of the server. The server will then send a request to GoodReads, parse the results, and return the appropriate values to the client, who will display the book search result values both on the command line and in the log files.
 
