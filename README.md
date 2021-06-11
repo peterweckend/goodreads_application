@@ -13,6 +13,8 @@ Upon receiving the command line arguments on run, the client will send a request
 Both the client and the server log exceptions to the command line and to log files. 
 The server's log files are located in `/goodreads_application/server/logs/serverLogs.log`. Similarly, the client's log files are located in `/goodreads_application/client/logs/clientLogs.log`.
 
+For any questions, feel free to contact me at peterweckend@gmail.com
+
 <hr/>
 
 ### Book Listing Exercise
