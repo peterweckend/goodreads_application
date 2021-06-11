@@ -7,8 +7,6 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URISyntaxException;
-
 @Service
 public class SearchBooksService {
     private static final String SEARCH_BOOKS_PATH = "/searchBooks";
@@ -17,13 +15,14 @@ public class SearchBooksService {
     private static final String API_FIELD_PARAM = "field";
     private static final String API_PAGE_NUMBER_PARAM = "pageNumber";
     private final RestTemplate restTemplate;
+    private static final Logger logger = LoggerFactory.getLogger(SearchBooksController.class);
 
 
     public SearchBooksService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public SearchBooksResponseModel searchBooks(SearchBooksRequestModel searchBooksRequestModel) throws URISyntaxException {
+    public BookModel[] searchBooks(SearchBooksRequestModel searchBooksRequestModel) {
         URIBuilder uriBuilder = new URIBuilder();
         uriBuilder.setScheme("http")
                   .setHost(searchBooksRequestModel.getHostname())
@@ -36,6 +35,6 @@ public class SearchBooksService {
         if (searchBooksRequestModel.getPageNumber() != null) {
             uriBuilder.addParameter(API_PAGE_NUMBER_PARAM, searchBooksRequestModel.getPageNumber());
         }
-        return this.restTemplate.getForObject(uriBuilder.toString(), SearchBooksResponseModel.class);
+        return this.restTemplate.getForObject(uriBuilder.toString(), BookModel[].class);
     }
 }

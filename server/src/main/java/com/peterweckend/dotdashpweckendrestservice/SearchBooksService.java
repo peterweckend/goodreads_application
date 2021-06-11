@@ -26,9 +26,6 @@ public class SearchBooksService {
     public static final String URL_PARAM_PAGE = "page";
     public static final String URL_PARAM_FIELD = "search[field]";
 
-    public static final String AUTHOR_FIELD = "author";
-    public static final String TITLE_FIELD = "title";
-
     public static final String BOOK_TAG = "best_book";
     public static final String AUTHOR_TAG = "author";
     public static final String AUTHOR_NAME_TAG = "name";

@@ -6,9 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.net.URISyntaxException;
-import java.util.Arrays;
-
 @Component
 public class SearchBooksController implements CommandLineRunner {
     private static final String HOSTNAME = "127.0.0.1";
@@ -32,14 +29,15 @@ public class SearchBooksController implements CommandLineRunner {
     public void run(String...args) {
         try {
             var searchResults = searchBooksService.searchBooks(createRequestModelForArguments(args));
-
-            for (BookModel book : searchResults.getBooks()) {
+            // In a real world application I wouldn't hardcode the output like this,
+            // I'd put it in its own set of files instead
+            for (BookModel book : searchResults) {
                 logger.info("---------------------");
                 logger.info("Author: " + book.getAuthor());
                 logger.info("Title: " + book.getTitle());
                 logger.info("Image URL: " + book.getImageUrl());
             }
-            System.exit(0);
+            logger.info("Fetching complete. Re-run the program to fetch with a different set of parameters.");
         } catch (Exception e) {
             returnHelpInfoAndQuit(e.toString());
         }
@@ -77,10 +75,19 @@ public class SearchBooksController implements CommandLineRunner {
     }
 
     public void returnHelpInfoAndQuit(String error) {
+        logger.info("---------------------");
+        logger.info("The client accepts the following command line arguments separated by a comma: ");
+        logger.info("--help (outputs a usage message and exists)");
+        logger.info("-s=TERMS, --search=TERMS (search terms for the GoodReads API)");
+        logger.info("--field=FIELD (where FIELD is one of 'author' or 'title', or 'all' [default])");
+        logger.info("-p=NUMBER (page number of results to fetch from GoodReads, defaults to 1)");
+        logger.info("-h=HOSTNAME, --host=HOSTNAME (the hostname or ip address where the server can be found. Defaults to 127.0.0.1");
+        logger.info("Example: ./mvnw spring-boot:run -Dspring-boot.run.arguments=\"--search=kitchen confidential,--field=title,--host=localhost,-p=1\"");
         if (error != null && error.length() != 0) {
-            logger.error(error);
+            logger.info("---------------------");
+            logger.error("An error occurred: " + error);
+            logger.error("Please try again.");
         }
-        logger.error("An error occurred. Instructions for command line arguments here. Please try again.");
         System.exit(0);
     }
 }

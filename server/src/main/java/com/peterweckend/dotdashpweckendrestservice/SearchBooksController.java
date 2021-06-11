@@ -23,7 +23,7 @@ public class SearchBooksController {
     @ResponseBody
     public ArrayList<BookModel> SearchBooksByTerms(
             @RequestParam(value = "searchTerms") String searchTerms,
-            @RequestParam(value = "field", defaultValue = SearchBooksService.AUTHOR_FIELD) String field,
+            @RequestParam(value = "field", required = false) String field,
             @RequestParam(value = "pageNumber", defaultValue = "1") Integer pageNumber) {
         try {
             return searchBooksService.SearchGoodReadsForBooksByTerms(searchTerms, field, pageNumber);
