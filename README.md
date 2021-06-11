@@ -32,13 +32,13 @@ Results include author, title, and a link or display of the image of the book)
 
 `-h=HOSTNAME,--host=HOSTNAME` (the hostname or ip address where the server can be found, should default to 127.0.0.1)
 
+_Example_: `-Dspring-boot.run.arguments="--search=the food lab,--field=title,--host=localhost,-p=1"`
+
 There should be a server app as well. The server app should provide REST endpoints that the client communicates with. 
 
 The server should listen on a non-restricted port and the client should connect to that port.
 
 The client should not directly contact the Goodreads API.
-
-Example: `-Dspring-boot.run.arguments="--search=the food lab,--field=title,--host=localhost,-p=1"`
 
 ### System Requirements
 
